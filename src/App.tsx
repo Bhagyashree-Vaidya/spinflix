@@ -5,6 +5,7 @@ import { MovieInput } from './components/MovieInput/MovieInput';
 import { MovieCard } from './components/MovieCard/MovieCard';
 import { Wheel } from './components/Wheel/Wheel';
 import { WinnerModal } from './components/WinnerModal/WinnerModal';
+import { SplashLoader } from './components/SplashLoader/SplashLoader';
 import { useWheelSpin } from './hooks/useWheelSpin';
 import { Movie } from './types';
 
@@ -28,6 +29,7 @@ function EmptyState() {
 }
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState<Movie[]>([]);
   const [winnerIndex, setWinnerIndex] = useState<number | null>(null);
 
@@ -87,7 +89,9 @@ export default function App() {
   }, [clearWinner, spin, movies]);
 
   return (
-    <div style={styles.page}>
+    <>
+      <SplashLoader onComplete={() => setLoading(false)} />
+    <div style={{ ...styles.page, opacity: loading ? 0 : 1, transition: 'opacity 0.5s ease' }}>
       <Header />
 
       <div className="app-layout">
@@ -197,6 +201,7 @@ export default function App() {
         onSpinAgain={handleSpinAgain}
       />
     </div>
+    </>
   );
 }
 

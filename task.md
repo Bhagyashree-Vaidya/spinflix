@@ -1,19 +1,19 @@
 # SpinFlix Rebuild Tasks
 
 - [x] Install framer-motion
-- [/] Setup project structure
-  - [ ] main.tsx
-  - [ ] vite.config.ts
-  - [ ] index.css (claymorphic design system)
-- [ ] Types (src/types/index.ts)
-- [ ] Hooks
-  - [ ] useTMDB.ts
-  - [ ] useWheelSpin.ts
-- [ ] Components
-  - [ ] Header/Header.tsx
-  - [ ] MovieInput/MovieInput.tsx
-  - [ ] MovieCard/MovieCard.tsx
-  - [ ] Wheel/Wheel.tsx
-  - [ ] WinnerModal/WinnerModal.tsx
-- [ ] App.tsx
-- [ ] Verify build passes
+- [x] Setup project structure
+  - [x] main.tsx
+  - [x] vite.config.ts
+  - [x] index.css (claymorphic design system)
+- [x] Types (src/types/index.ts)
+- [x] Hooks
+  - [x] useTMDB.ts
+  - [x] useWheelSpin.ts
+- [x] Components
+  - [x] Header/Header.tsx
+  - [x] MovieInput/MovieInput.tsx
+  - [x] MovieCard/MovieCard.tsx
+  - [x] Wheel/Wheel.tsx
+  - [x] WinnerModal/WinnerModal.tsx
+- [x] App.tsx
+- [x] Verify build passes

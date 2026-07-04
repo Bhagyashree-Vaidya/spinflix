@@ -39,13 +39,8 @@ export function SplashLoader({ onComplete }: SplashLoaderProps) {
           <div style={styles.orb1} />
           <div style={styles.orb2} />
 
-          {/* Video */}
-          <motion.div
-            initial={{ scale: 0.92, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
-            style={styles.videoWrap}
-          >
+          {/* Video — fullscreen cover */}
+          <div style={styles.videoWrap}>
             <video
               ref={videoRef}
               src={`${import.meta.env.BASE_URL}loader.mp4`}
@@ -53,8 +48,9 @@ export function SplashLoader({ onComplete }: SplashLoaderProps) {
               muted
               playsInline
               loop
+              autoPlay
             />
-          </motion.div>
+          </div>
 
           {/* Progress bar */}
           <motion.div style={styles.progressTrack}>
@@ -86,13 +82,12 @@ const styles: Record<string, React.CSSProperties> = {
   overlay: {
     position: 'fixed',
     inset: 0,
-    background: 'var(--bg)',
+    background: '#0a0a0f',
     zIndex: 9999,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: '32px',
+    justifyContent: 'flex-end',
     overflow: 'hidden',
   },
   orb1: {
@@ -102,8 +97,9 @@ const styles: Record<string, React.CSSProperties> = {
     top: '-150px',
     left: '-150px',
     borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)',
+    background: 'radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%)',
     pointerEvents: 'none',
+    zIndex: 1,
   },
   orb2: {
     position: 'absolute',
@@ -112,19 +108,14 @@ const styles: Record<string, React.CSSProperties> = {
     bottom: '-100px',
     right: '-100px',
     borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(236,72,153,0.12) 0%, transparent 70%)',
+    background: 'radial-gradient(circle, rgba(236,72,153,0.15) 0%, transparent 70%)',
     pointerEvents: 'none',
+    zIndex: 1,
   },
   videoWrap: {
-    borderRadius: '28px',
-    overflow: 'hidden',
-    boxShadow: '20px 20px 40px rgba(210,180,255,.3), -15px -15px 30px rgba(255,255,255,.95)',
-    border: '2px solid rgba(255,255,255,0.8)',
-    maxWidth: 'min(520px, 90vw)',
-    maxHeight: '65vh',
-    width: '100%',
-    position: 'relative',
-    zIndex: 1,
+    position: 'absolute',
+    inset: 0,
+    zIndex: 0,
   },
   video: {
     width: '100%',
@@ -133,17 +124,16 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'block',
   },
   progressTrack: {
-    width: 'min(320px, 80vw)',
+    width: '100%',
     height: '4px',
-    background: 'rgba(139,92,246,0.15)',
-    borderRadius: '99px',
+    background: 'rgba(255,255,255,0.15)',
     overflow: 'hidden',
     position: 'relative',
-    zIndex: 1,
+    zIndex: 2,
   },
   progressBar: {
     height: '100%',
-    background: 'linear-gradient(90deg, var(--purple), var(--pink))',
+    background: 'linear-gradient(90deg, #8B5CF6, #EC4899)',
     borderRadius: '99px',
     transformOrigin: 'left',
   },
@@ -152,14 +142,25 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'center',
     gap: '10px',
     position: 'relative',
-    zIndex: 1,
+    zIndex: 2,
+    marginBottom: '28px',
+    background: 'rgba(0,0,0,0.4)',
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
+    padding: '10px 24px',
+    borderRadius: '99px',
+    border: '1px solid rgba(255,255,255,0.12)',
   },
   brandIcon: {
     fontSize: '28px',
   },
   brandText: {
-    fontSize: '28px',
+    fontSize: '26px',
     fontWeight: 900,
     letterSpacing: '-0.04em',
+    background: 'linear-gradient(135deg, #a78bfa, #f472b6)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text',
   },
 };

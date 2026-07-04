@@ -8,10 +8,11 @@ dist-ssr/
 # Vite cache
 .vite/
 
-# Environment variables (contains API keys)
+# Environment variables (contains API keys - NEVER commit these)
 .env
 .env.local
 .env.production
+.env.*.local
 
 # macOS
 .DS_Store

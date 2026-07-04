@@ -1,32 +1,53 @@
-import { useState, useCallback } from 'react';
-import { WheelSegment, SpinResult } from '../types';
-import { useLocalStorage } from './useLocalStorage';
+import { useState, useCallback, useRef } from 'react';
+import { Movie } from '../types';
 
-export const useWheelSpin = (segments: WheelSegment[]) => {
+interface UseWheelSpinReturn {
+  isSpinning: boolean;
+  targetRotation: number;
+  winner: Movie | null;
+  spin: (movies: Movie[]) => void;
+  onSpinComplete: (movies: Movie[]) => void;
+  clearWinner: () => void;
+}
+
+export function useWheelSpin(): UseWheelSpinReturn {
   const [isSpinning, setIsSpinning] = useState(false);
-  const [currentWinner, setCurrentWinner] = useState<WheelSegment | null>(null);
-  const [spinHistory, setSpinHistory] = useLocalStorage<SpinResult[]>('spinHistory', []);
+  const [targetRotation, setTargetRotation] = useState(0);
+  const [winner, setWinner] = useState<Movie | null>(null);
+  const accumulatedRotation = useRef(0);
 
-  const startSpin = useCallback(() => {
-    if (isSpinning) return;
+  const spin = useCallback((movies: Movie[]) => {
+    if (isSpinning || movies.length === 0) return;
+
     setIsSpinning(true);
-    setCurrentWinner(null);
+    setWinner(null);
+
+    // 5–10 full rotations + random offset
+    const extraSpins = 1800 + Math.random() * 1800;
+    const newRotation = accumulatedRotation.current + extraSpins;
+    accumulatedRotation.current = newRotation;
+    setTargetRotation(newRotation);
   }, [isSpinning]);
 
-  const handleSpinComplete = useCallback((winner: WheelSegment) => {
-    setIsSpinning(false);
-    setCurrentWinner(winner);
-    setSpinHistory(prev => [
-      { id: Date.now().toString(), timestamp: Date.now(), winner },
-      ...prev
-    ].slice(0, 10)); // Keep last 10 spins
-  }, [setSpinHistory]);
+  /** Called by the Wheel component's onComplete callback */
+  const onSpinComplete = useCallback((movies: Movie[]) => {
+    if (movies.length === 0) return;
 
-  return {
-    isSpinning,
-    currentWinner,
-    spinHistory,
-    startSpin,
-    handleSpinComplete
-  };
-}; 
+    const finalAngle = accumulatedRotation.current;
+
+    // Mathematical winner calculation (pointer fixed at top = 0°)
+    // Normalize the rotation so we know where 0° of the wheel is pointing
+    const normalized = ((360 - (finalAngle % 360)) + 360) % 360;
+    const sliceAngle = 360 / movies.length;
+    const winnerIndex = Math.floor(normalized / sliceAngle) % movies.length;
+
+    setWinner(movies[winnerIndex]);
+    setIsSpinning(false);
+  }, []);
+
+  const clearWinner = useCallback(() => {
+    setWinner(null);
+  }, []);
+
+  return { isSpinning, targetRotation, winner, spin, onSpinComplete, clearWinner };
+}
